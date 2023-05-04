@@ -1,6 +1,6 @@
-package org.lp1_grupo2;
+package org.grupo2;
 
-import org.lp1_grupo2.modelos.Livro;
+import org.grupo2.modelos.Livro;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,7 +1,8 @@
-package org.lp1_grupo2.modelos;
+package org.grupo2.modelos;
 
-import org.lp1_grupo2.interfaces.GerenciamentoDeLivros;
-import org.lp1_grupo2.interfaces.GerenciamentoDeUsuarios;
+
+import org.grupo2.interfaces.GerenciamentoDeLivros;
+import org.grupo2.interfaces.GerenciamentoDeUsuarios;
 
 public class Administrador extends Usuario implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
     public void cadastrarFuncionario(){

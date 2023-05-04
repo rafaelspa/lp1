@@ -1,4 +1,4 @@
-package org.lp1_grupo2.modelos;
+package org.grupo2.modelos;
 
 public class Cliente extends Usuario {
     @Override

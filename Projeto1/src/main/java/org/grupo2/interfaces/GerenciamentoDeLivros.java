@@ -1,4 +1,4 @@
-package org.lp1_grupo2.interfaces;
+package org.grupo2.interfaces;
 
 public interface GerenciamentoDeLivros{
     public void cadastrarLivro();

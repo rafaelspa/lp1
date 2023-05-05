@@ -1,21 +1,27 @@
 package org.grupo2.modelos;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Emprestimo {
     private int id;
     private Livro livro;
     private Cliente cliente;
-    private Usuario usuario;
-    private Date dataEmprestimo;
-    private Date dataDevolucao;
+    private LocalDateTime dataEmprestimo;
+    private LocalDateTime dataDevolucao;
 
-    public Emprestimo(int id, Livro livro, Cliente cliente, Usuario usuario, Date dataEmprestimo, Date dataDevolucao) {
+    public Emprestimo(int id, Livro livro, Cliente cliente) {
         this.id = id;
         this.livro = livro;
         this.cliente = cliente;
-        this.usuario = usuario;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public Emprestimo(int id, Livro livro, Cliente cliente, LocalDateTime dataEmprestimo, LocalDateTime dataDevolucao) {
+        this.id = id;
+        this.livro = livro;
+        this.cliente = cliente;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
     }
@@ -43,27 +49,19 @@ public class Emprestimo {
         this.cliente = cliente;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Date getDataEmprestimo() {
+    public LocalDateTime getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(Date dataEmprestimo) {
+    public void setDataEmprestimo(LocalDateTime dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Date getDataDevolucao() {
+    public LocalDateTime getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(Date dataDevolucao) {
+    public void setDataDevolucao(LocalDateTime dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 
@@ -72,12 +70,12 @@ public class Emprestimo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Emprestimo that = (Emprestimo) o;
-        return id == that.id && Objects.equals(livro, that.livro) && Objects.equals(cliente, that.cliente) && Objects.equals(usuario, that.usuario) && Objects.equals(dataEmprestimo, that.dataEmprestimo) && Objects.equals(dataDevolucao, that.dataDevolucao);
+        return id == that.id && Objects.equals(livro, that.livro) && Objects.equals(cliente, that.cliente) && Objects.equals(dataEmprestimo, that.dataEmprestimo) && Objects.equals(dataDevolucao, that.dataDevolucao);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, livro, cliente, usuario, dataEmprestimo, dataDevolucao);
+        return Objects.hash(id, livro, cliente, dataEmprestimo, dataDevolucao);
     }
 }
 

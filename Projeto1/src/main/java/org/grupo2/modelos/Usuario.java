@@ -87,7 +87,7 @@ public abstract class Usuario {
         if (!Livro.livroDisponivel(livro)) {
             throw new Exception("Não há exemplares disponíveis.");
         }
-        Reserva reserva = new Reserva(livro, cliente);
+        Reserva reserva = new Reserva(id, livro, cliente);
         Biblioteca.salvarReserva(reserva);
         System.out.println("Livro reservado.");
     }
@@ -99,8 +99,4 @@ public abstract class Usuario {
             devolverLivro(livro);
         }
     }
-
-    public abstract void reservarLivro();
-
-    public abstract void cancelarReserva();
 }

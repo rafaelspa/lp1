@@ -20,12 +20,13 @@ public class Cliente extends Usuario {
     }
 
     @Override
-    public void reservarLivro() {
+    public void reservarLivro(int id, Livro livro, Cliente cliente) throws Exception {
+        super.reservarLivro(id, livro, cliente);
     }
 
     @Override
-    public void cancelarReserva() {
-
+    public void cancelarReserva(Livro livro, Cliente cliente) throws Exception {
+        super.cancelarReserva(livro, cliente);
     }
 
     public String toJson() {

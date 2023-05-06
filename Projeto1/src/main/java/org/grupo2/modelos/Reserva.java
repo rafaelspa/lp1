@@ -5,18 +5,14 @@ import java.util.Objects;
 
 
 public class Reserva {
-    private static int id = 0;
+    private int id;
     private Livro livro;
     private Cliente cliente;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
 
-    public Reserva() {
-        setId(getId() + 1);
-    }
-
-    public Reserva(Livro livro, Cliente cliente) {
-        setId(this.getId() + 1);
+    public Reserva(int id, Livro livro, Cliente cliente) {
+        this.id = id;
         this.livro = livro;
         this.cliente = cliente;
         this.dataInicio = LocalDateTime.now();
@@ -24,7 +20,7 @@ public class Reserva {
     }
 
     public Reserva(Livro livro, Cliente cliente, LocalDateTime dataInicio, LocalDateTime dataFim) {
-        setId(getId() + 1);
+        this.id = id;
         this.livro = livro;
         this.cliente = cliente;
         this.dataInicio = dataInicio;

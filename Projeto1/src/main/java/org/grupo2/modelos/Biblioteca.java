@@ -1,16 +1,17 @@
 package org.grupo2.modelos;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Biblioteca {
-    private List<Livro> livros;
-    private List<Usuario> usuarios;
-    private static List<Emprestimo> emprestimos;
-    private static List<Reserva> reservas;
+    private final static Integer idLivros = 0;
+    private final static Integer idUsuarios = 0;
+    private final static Integer idEmprestimos = 0;
+    private final static Integer idReservas = 0;
+    private Map<Integer, Livro> livros;
+    private Map<Integer, Usuario> usuarios;
+    private static Map<Integer, Emprestimo> emprestimos;
+    private static Map<Integer, Reserva> reservas;
 
     public Livro retornaLivro(String nome) {
         // TODO: 24/04/2023
@@ -64,22 +65,29 @@ public class Biblioteca {
     }
 
     public static void salvaEmprestimo(Emprestimo emprestimo) {
-        emprestimos.add(emprestimo);
+        emprestimos.put(Biblioteca.idEmprestimos + 1, emprestimo);
     }
 
     public static void salvarReserva(Reserva reserva) {
-        reservas.add(reserva);
+        reservas.put(Biblioteca.idReservas + 1, reserva);
     }
 
     public static Optional<Reserva> procurarReservaPorLivroECliente(Livro livro, Cliente cliente) {
-        return reservas.stream().filter(reserva -> reserva.getLivro().equals(livro) && reserva.getCliente().equals(cliente)).findFirst();
+        Optional<Reserva> reservaOptional = Optional.empty();
+        for (int i = 1; i < reservas.size() + 1; i++) {
+            if (reservas.get(i).getLivro().equals(livro) && reservas.get(i).getCliente().equals(cliente)) {
+                reservaOptional = Optional.of(reservas.get(i));
+                break;
+            }
+        }
+        return reservaOptional;
     }
 
-    public static Optional<Object> procuraReservaPorId(int id) {
-        return Optional.of(reservas.stream().filter(reserva -> reserva.getId() == id).findFirst());
+    public static Optional<Reserva> procuraReservaPorId(int id) {
+        return Optional.of(reservas.get(id));
     }
 
     public static void cancelarReserva(Reserva reserva) {
-        reservas = reservas.stream().filter(reservaProcurada -> reservaProcurada.getId() != reserva.getId()).collect(Collectors.toList());
+        reservas.remove(reserva.getId());
     }
 }

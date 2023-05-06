@@ -1,17 +1,48 @@
 package org.grupo2.modelos;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.sun.net.httpserver.HttpServer;
+import org.grupo2.handlers.ClienteHandler;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class Biblioteca {
     private final static Integer idLivros = 0;
     private final static Integer idUsuarios = 0;
     private final static Integer idEmprestimos = 0;
     private final static Integer idReservas = 0;
-    private Map<Integer, Livro> livros;
-    private Map<Integer, Usuario> usuarios;
+    private static Map<Integer, Livro> livros;
+    private static Map<Integer, Cliente> clientes;
     private static Map<Integer, Emprestimo> emprestimos;
     private static Map<Integer, Reserva> reservas;
+
+    private static final int PORT = 8080;
+
+    public static void startServer() throws IOException {
+        clientes.put(1, new Cliente(1,"Nome Cliente 1", "123.123.123-0", "Endereco 1", "cliente1@email.com", "senha_cliente1"));
+        HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
+        server.createContext("/clientes", new ClienteHandler());
+    }
+
+    public static Map<Integer, Livro> getLivros() {
+        return livros;
+    }
+
+    public static Map<Integer, Cliente> getClientes() {
+        return clientes;
+    }
+
+    public static Map<Integer, Emprestimo> getEmprestimos() {
+        return emprestimos;
+    }
+
+    public static Map<Integer, Reserva> getReservas() {
+        return reservas;
+    }
 
     public Livro retornaLivro(String nome) {
         // TODO: 24/04/2023

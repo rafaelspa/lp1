@@ -99,4 +99,8 @@ public abstract class Usuario {
             devolverLivro(livro);
         }
     }
+
+    public abstract void reservarLivro();
+
+    public abstract void cancelarReserva();
 }

@@ -2,21 +2,31 @@ package org.grupo2.modelos;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
+
 
 public class Reserva {
-    private int id;
+    private static int id = 0;
     private Livro livro;
     private Cliente cliente;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
 
     public Reserva() {
+        setId(getId() + 1);
     }
 
-    public Reserva(int id, Livro livro, LocalDateTime dataInicio, LocalDateTime dataFim) {
-        this.id = id;
+    public Reserva(Livro livro, Cliente cliente) {
+        setId(this.getId() + 1);
         this.livro = livro;
+        this.cliente = cliente;
+        this.dataInicio = LocalDateTime.now();
+        this.dataFim = dataInicio.plusDays(7);
+    }
+
+    public Reserva(Livro livro, Cliente cliente, LocalDateTime dataInicio, LocalDateTime dataFim) {
+        setId(getId() + 1);
+        this.livro = livro;
+        this.cliente = cliente;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
     }
@@ -25,7 +35,7 @@ public class Reserva {
         return id;
     }
 
-    public void setId(int id) {
+    private void setId(int id) {
         this.id = id;
     }
 
@@ -66,7 +76,7 @@ public class Reserva {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reserva reserva = (Reserva) o;
-        return id == reserva.id && Objects.equals(livro, reserva.livro) && Objects.equals(dataInicio, reserva.dataInicio) && Objects.equals(dataFim, reserva.dataFim);
+        return Objects.equals(livro, reserva.livro) && Objects.equals(cliente, reserva.cliente) && Objects.equals(dataInicio, reserva.dataInicio) && Objects.equals(dataFim, reserva.dataFim);
     }
 
     @Override
@@ -74,7 +84,19 @@ public class Reserva {
         return Objects.hash(id, livro, dataInicio, dataFim);
     }
 
-    public boolean existeReserva(Livro livro, Cliente cliente) {
-        return Biblioteca.procurarReserva(livro, cliente).isPresent();
+    public static boolean existeReservaPorLivroECliente(Livro livro, Cliente cliente) throws Exception {
+        if (Biblioteca.procurarReservaPorLivroECliente(livro, cliente).isPresent()) {
+            return true;
+        } else {
+            throw new Exception("Não existe essa reserva.");
+        }
+    }
+
+    public static boolean existeReservaPorId(int id) throws Exception {
+        if (Biblioteca.procuraReservaPorId(id).isPresent()) {
+            return true;
+        } else {
+            throw new Exception("Não existe essa reserva.");
+        }
     }
 }

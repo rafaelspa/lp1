@@ -94,7 +94,16 @@ public class Livro {
         //TODO
     }
 
-    public void devolver() {
-        //TODO
+    public static boolean devolver(Livro livro) throws Exception {
+        if (livro.getNumExemplaresDisponiveis() < livro.getNumExemplares()) {
+            livro.setNumExemplaresDisponiveis(livro.getNumExemplaresDisponiveis() + 1);
+            return true;
+        } else {
+            throw new Exception("Todos os livros já estão na biblioteca");
+        }
+    }
+
+    public static boolean livroDisponivel(Livro livro) {
+        return livro.getNumExemplaresDisponiveis() > 0;
     }
 }

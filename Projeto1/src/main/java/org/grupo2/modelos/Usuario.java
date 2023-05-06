@@ -1,5 +1,7 @@
 package org.grupo2.modelos;
 
+import java.util.Optional;
+
 public abstract class Usuario {
     private String nome;
     private String cpf;
@@ -59,29 +61,42 @@ public abstract class Usuario {
     }
 
     public void emprestarLivro(int idEmprestimo, Livro livro, Cliente cliente) throws Exception {
-        if (Biblioteca.existeEmprestimo(idEmprestimo)) {
+        if (Biblioteca.existeEmprestimoPorId(idEmprestimo)) {
             throw new Exception("Emprestimo já existente.");
         }
         if (livro.getNumExemplaresDisponiveis() > 0) {
             throw new Exception("Não há exemplares disponíveis.");
         }
+        if (Reserva.existeReservaPorLivroECliente(livro, cliente)) {
+            cancelarReserva(livro, cliente);
+        }
         Emprestimo emprestimo = new Emprestimo(idEmprestimo, livro, cliente);
-        Biblioteca.salvarEmprestimo(emprestimo);
+        Biblioteca.salvaEmprestimo(emprestimo);
         System.out.println("Emprestimo realizado com sucesso");
     }
 
     public void devolverLivro(Livro livro) throws Exception {
-        if(livro.getNumExemplaresDisponiveis() == livro.getNumExemplares()) {
-            throw new Exception("Já existe uma quantidade máxima desse livro na biblioteca");
+        if (Livro.devolver(livro)) {
+            System.out.println("Livro devolvido!");
+        } else {
+            System.out.println("Houve um problema");
         }
-        livro.devolver();
-        System.out.println("Livro devolvido com sucesso!");
     }
 
-    public void reservarLivro() {
-
+    public void reservarLivro(int id, Livro livro, Cliente cliente) throws Exception {
+        if (!Livro.livroDisponivel(livro)) {
+            throw new Exception("Não há exemplares disponíveis.");
+        }
+        Reserva reserva = new Reserva(livro, cliente);
+        Biblioteca.salvarReserva(reserva);
+        System.out.println("Livro reservado.");
     }
 
-    public void cancelarReserva() {
+    public void cancelarReserva(Livro livro, Cliente cliente) throws Exception {
+        Optional<Reserva> reservaOptional = Biblioteca.procurarReservaPorLivroECliente(livro, cliente);
+        reservaOptional.ifPresent(Biblioteca::cancelarReserva);
+        if (reservaOptional.isPresent()) {
+            devolverLivro(livro);
+        }
     }
 }

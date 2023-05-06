@@ -71,14 +71,21 @@ public class ClienteHandler implements HttpHandler {
         sendResponse(exchange, cliente.toJson(), 201);
     }
 
-    private void handleDeleteCliente(HttpExchange exchange, Integer id) {
+    private void handleDeleteCliente(HttpExchange exchange, Integer id) throws IOException {
+        Cliente cliente = Biblioteca.getClientes().remove(id);
+        if (cliente == null) {
+            handleNotFound(exchange, "Cliente não encontrado com id" + id);
+        } else {
+            sendResponse(exchange, "Cliente excluido com sucesso.", 204);
+        }
     }
 
-    private void handleBadRequest(HttpExchange exchange, String s) {
+    private void handleBadRequest(HttpExchange exchange, String s) throws IOException {
+        sendResponse(exchange, s, 400);
     }
 
     private void sendResponse(HttpExchange exchange, String response, int rCode) throws IOException {
-        long headerLength = rCode != 404 ? response.getBytes().length : response.length();
+        long headerLength = (rCode == 404 || rCode == 400) ? response.length() : response.getBytes().length;
         exchange.sendResponseHeaders(rCode, headerLength);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());

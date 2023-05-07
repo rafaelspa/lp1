@@ -4,7 +4,22 @@ package org.grupo2.modelos;
 import org.grupo2.interfaces.GerenciamentoDeLivros;
 import org.grupo2.interfaces.GerenciamentoDeUsuarios;
 
-public class Funcionario { // extends Usuario implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
+public class Funcionario  extends Usuario { // implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
+    private int id;
+
+    public Funcionario(String nome, String cpf, String endereco, String email, String senha, int id) {
+        super(nome, cpf, endereco, email, senha);
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void realizarEmprestimo(){
 
     }

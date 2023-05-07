@@ -14,8 +14,8 @@ public class Emprestimo {
         this.id = id;
         this.livro = livro;
         this.cliente = cliente;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
+        this.dataEmprestimo = LocalDateTime.now();
+        this.dataDevolucao = dataEmprestimo.plusDays(7);
     }
 
     public Emprestimo(int id, Livro livro, Cliente cliente, LocalDateTime dataEmprestimo, LocalDateTime dataDevolucao) {

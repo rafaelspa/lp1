@@ -12,9 +12,6 @@ public class ClienteHandler implements HttpHandler {
 
     private static Integer proximoId = 2;
 
-    public ClienteHandler() {
-    }
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
@@ -26,16 +23,29 @@ public class ClienteHandler implements HttpHandler {
                 handleGetCliente(exchange, id);
             } else if ("DELETE".equals(requestMethod)) {
                 handleDeleteCliente(exchange, id);
+            } else if ("PUT".equals(requestMethod)) {
+                handlePutCliente(exchange, id);
             }
         } else if ("GET".equals(requestMethod)) {
             handleGetClientes(exchange);
         } else if ("POST".equals(requestMethod)) {
             handlePostCliente(exchange);
         } else {
-            handleBadRequest(exchange, "Requisicao invalida: " + requestMethod + " " + path);
+            handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
         }
     }
 
+    // CREATE
+    private void handlePostCliente(HttpExchange exchange) throws IOException {
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Cliente cliente = Cliente.fromJson(requestBody);
+        cliente.setId(proximoId);
+        proximoId++;
+        Biblioteca.getClientes().put(cliente.getId(), cliente);
+        sendResponse(exchange, cliente.toJson(), 201);
+    }
+
+    // READ ALL
     private void handleGetClientes(HttpExchange exchange) throws IOException {
         StringBuilder response = new StringBuilder();
         response.append("[");
@@ -50,6 +60,7 @@ public class ClienteHandler implements HttpHandler {
         sendResponse(exchange, response.toString());
     }
 
+    // READ
     private void handleGetCliente(HttpExchange exchange, Integer id) throws IOException {
         Cliente cliente = Biblioteca.getClientes().get(id);
         if (cliente == null) {
@@ -59,25 +70,41 @@ public class ClienteHandler implements HttpHandler {
         }
     }
 
-    private void handleNotFound(HttpExchange exchange, String s) throws IOException {
-        sendResponse(exchange, s, 404);
+    // UPDATE
+    private void handlePutCliente(HttpExchange exchange, Integer id) throws IOException {
+        Cliente cliente = Biblioteca.getClientes().get(id);
+        if (cliente == null) {
+            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
+        } else {
+            String requestBody = new String(exchange.getRequestBody().readAllBytes());
+            Cliente clienteAtualizado = Cliente.fromJson(requestBody);
+            cliente.setId(clienteAtualizado.getId());
+            cliente.setNome(clienteAtualizado.getNome());
+            cliente.setCpf(clienteAtualizado.getCpf());
+            cliente.setEndereco(clienteAtualizado.getEndereco());
+            cliente.setEmail(clienteAtualizado.getEmail());
+            cliente.setSenha(clienteAtualizado.getSenha());
+            sendResponse(exchange, cliente.toJson());
+        }
     }
 
-    private void handlePostCliente(HttpExchange exchange) throws IOException {
-        String requestBody = new String(exchange.getRequestBody().readAllBytes());
-        Cliente cliente = Cliente.fromJson(requestBody);
-        cliente.setId(proximoId++);
-        Biblioteca.getClientes().put(cliente.getId(), cliente);
-        sendResponse(exchange, cliente.toJson(), 201);
-    }
-
+    // DELETE
     private void handleDeleteCliente(HttpExchange exchange, Integer id) throws IOException {
         Cliente cliente = Biblioteca.getClientes().remove(id);
         if (cliente == null) {
-            handleNotFound(exchange, "Cliente não encontrado com id" + id);
+            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
         } else {
-            sendResponse(exchange, "Cliente excluido com sucesso.", 204);
+            try {
+                System.out.println("DELETE /clientes/" + id + ": Cliente deletado com sucesso.");
+                sendResponse(exchange, "", 204);
+            } catch (IOException e) {
+                throw new IOException();
+            }
         }
+    }
+
+    private void handleNotFound(HttpExchange exchange, String s) throws IOException {
+        sendResponse(exchange, s, 404);
     }
 
     private void handleBadRequest(HttpExchange exchange, String s) throws IOException {
@@ -86,6 +113,9 @@ public class ClienteHandler implements HttpHandler {
 
     private void sendResponse(HttpExchange exchange, String response, int rCode) throws IOException {
         long headerLength = (rCode == 404 || rCode == 400) ? response.length() : response.getBytes().length;
+        if (rCode == 204) {
+            headerLength = -1L;
+        }
         exchange.sendResponseHeaders(rCode, headerLength);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());

@@ -106,4 +106,25 @@ public class Livro {
     public static boolean livroDisponivel(Livro livro) {
         return livro.getNumExemplaresDisponiveis() > 0;
     }
+
+    public String toJson() {
+        return "{\"id\": " + this.getId() + ", \"titulo\": \"" + this.getTitulo() +
+                ", \"autor\": \"" + this.getAutor() + ", \"editora\": \"" + this.getEditora() +
+                ", \"anoPublicacao\": \"" + this.getAnoPublicacao() + ", \"numExemplares\": \"" + this.getNumExemplares() +
+                ", \"numExemplaresDisponiveis\": \"" + this.getNumExemplaresDisponiveis() + "\"}";
+    }
+
+    public static Livro fromJson(String requestBody) {
+        String requestBodyClean = requestBody.replace("{", "").replace("}","");
+        String[] splitProperties = requestBodyClean.split(",");
+        int jsonId = Integer.parseInt(splitProperties[0].split(":")[1]);
+        String jsonTitulo = splitProperties[1].split(":")[1];
+        String jsonAutor = splitProperties[2].split(":")[1];
+        String jsonEditora = splitProperties[3].split(":")[1];
+        int jsonAnoPublicacao = Integer.parseInt(splitProperties[4].split(":")[1]);
+        int jsonNumExemplares = Integer.parseInt(splitProperties[5].split(":")[1]);
+        int jsonNumExemplaresDisponiveis = Integer.parseInt(splitProperties[6].split(":")[1]);
+        return new Livro (jsonId, jsonTitulo, jsonAutor, jsonEditora, jsonAnoPublicacao,
+                jsonNumExemplares, jsonNumExemplaresDisponiveis);
+    }
 }

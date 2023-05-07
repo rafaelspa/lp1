@@ -43,6 +43,4 @@ public class Cliente extends Usuario {
         String jsonSenha = splitProperties[5].split(":")[1].trim().replace("\"","");
         return new Cliente(jsonId, jsonNome, jsonCpf, jsonEndereco, jsonEmail, jsonSenha);
     }
-
-
 }

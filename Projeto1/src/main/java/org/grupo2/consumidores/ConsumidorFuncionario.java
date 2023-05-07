@@ -7,52 +7,52 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
-public class ConsumidorCliente {
-    private static final String BASE_URL = "http://localhost:8080/clientes";
+public class ConsumidorFuncionario {
+	private static final String BASE_URL = "http://localhost:8080/funcionarios";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        // POST /clientes
-        String requestBody = "{\"id\": 2, \"nome\": \"Nome Cliente 2\", \"cpf\": \"100.000.000-02\", "+
-                "\"endereco\": \"Endereco Cliente 2\", \"email\": \"cliente2@email.com\", \"senha\": \"senha_cliente2\"}";
+        // POST /funcionarios
+        String requestBody = "{\"id\": 2, \"nome\": \"Nome Funcionario 2\", \"cpf\": \"200.000.000-02\", "+
+                "\"endereco\": \"Endereco Funcionario 2\", \"email\": \"funcionario2@email.com\", \"senha\": \"senha_funcionario2\"}";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("POST /clientes: " + response.body());
+        System.out.println("POST /funcionarios: " + response.body());
 
-        // GET /clientes
+        // GET /funcionarios
         request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .GET()
                 .build();
         response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("GET /clientes: " + response.body());
+        System.out.println("GET /funcionarios: " + response.body());
 
-        // GET /clientes/{id}
+        // GET /funcionarios/{id}
         int id = 1;
         request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + id))
                 .GET()
                 .build();
         response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("GET /clientes/" + id + ": " + response.body());
+        System.out.println("GET /funcionarios/" + id + ": " + response.body());
 
-        // PUT /clientes/{id}
-        requestBody = "{\"id\": " + id + ", \"nome\": \"nome 3\", \"cpf\": \"456.411.988-63\", "+
-                "\"endereco\": \"endereco 3\", \"email\": \"email3@email.com\", \"senha\": \"senha 3\"}";
+        // PUT /funcionarios/{id}
+        requestBody = "{\"id\": 3, \"nome\": \"Nome Funcionario 3\", \"cpf\": \"200.000.000-03\", "+
+                "\"endereco\": \"Endereco Funcionario 3\", \"email\": \"funcionario3@email.com\", \"senha\": \"senha_funcionario3\"}";
         request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + id))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
                 .build();
         response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("PUT /clientes/" + id + ": " + response.body());
+        System.out.println("PUT /funcionarios/" + id + ": " + response.body());
 
-        // DELETE /clientes/{id}
+        // DELETE /funcionarios/{id}
         request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/" + id))
                 .DELETE()

@@ -9,9 +9,6 @@ public abstract class Usuario {
     private String email;
     private String senha;
 
-    public Usuario() {
-    }
-
     public Usuario(String nome, String cpf, String endereco, String email, String senha) {
         this.nome = nome;
         this.cpf = cpf;
@@ -71,7 +68,7 @@ public abstract class Usuario {
             cancelarReserva(livro, cliente);
         }
         Emprestimo emprestimo = new Emprestimo(idEmprestimo, livro, cliente);
-        Biblioteca.salvaEmprestimo(emprestimo);
+        Biblioteca.salvarEmprestimo(emprestimo);
         System.out.println("Emprestimo realizado com sucesso");
     }
 

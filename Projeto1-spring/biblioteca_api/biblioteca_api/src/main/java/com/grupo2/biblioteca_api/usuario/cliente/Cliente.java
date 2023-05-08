@@ -1,30 +1,24 @@
 package com.grupo2.biblioteca_api.usuario.cliente;
 
 import com.grupo2.biblioteca_api.usuario.Usuario;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "clientes")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Cliente  {
+public class Cliente extends Usuario {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @OneToOne
-    private Usuario usuario;
-
-    public Cliente(UUID id, Usuario usuario) {
-        this.id = id;
-        this.usuario = usuario;
+    public Cliente(String nome, String cpf, String endereco, String email, String senha) {
+        super(nome, cpf, endereco, email, senha);
     }
+
+
 }

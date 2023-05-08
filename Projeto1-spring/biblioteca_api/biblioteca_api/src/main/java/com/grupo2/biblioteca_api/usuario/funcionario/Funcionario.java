@@ -6,22 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "funcionarios")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Funcionario { // implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
+public class Funcionario extends Usuario { // implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @OneToOne
-    private Usuario usuario;
-
-    public Funcionario(String nome, String cpf, String endereco, String email, String senha, UUID id, Usuario usuario) {
-        this.id = UUID.randomUUID();
-        this.usuario = usuario;
+    public Funcionario(String nome, String cpf, String endereco, String email, String senha) {
+        super(nome, cpf, endereco, email, senha);
     }
 }

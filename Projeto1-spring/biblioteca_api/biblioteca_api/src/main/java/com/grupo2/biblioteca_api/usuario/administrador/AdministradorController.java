@@ -1,7 +1,5 @@
 package com.grupo2.biblioteca_api.usuario.administrador;
 
-import com.grupo2.biblioteca_api.usuario.cliente.Cliente;
-import com.grupo2.biblioteca_api.usuario.cliente.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

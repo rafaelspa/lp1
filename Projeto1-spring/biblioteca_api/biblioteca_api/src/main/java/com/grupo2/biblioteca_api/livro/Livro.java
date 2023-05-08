@@ -1,13 +1,9 @@
 package com.grupo2.biblioteca_api.livro;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "livros")
@@ -16,7 +12,8 @@ import java.util.UUID;
 @Setter
 public class Livro {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String titulo;
     private String autor;
     private String editora;
@@ -24,8 +21,7 @@ public class Livro {
     private Integer numExemplares;
     private Integer numExemplaresDisponiveis;
 
-    public Livro(UUID id, String titulo, String autor, String editora, Integer anoPublicacao, Integer numExemplares, Integer numExemplaresDisponiveis) {
-        this.id = UUID.randomUUID();
+    public Livro(String titulo, String autor, String editora, Integer anoPublicacao, Integer numExemplares, Integer numExemplaresDisponiveis) {
         this.titulo = titulo;
         this.autor = autor;
         this.editora = editora;

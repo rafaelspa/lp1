@@ -26,8 +26,8 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> findAll() {
-        List<Funcionario> funcionario = funcionarioService.findAll();
-        return ResponseEntity.ok(funcionario);
+        List<Funcionario> funcionarios = funcionarioService.findAll();
+        return ResponseEntity.ok(funcionarios);
     }
 
     @PostMapping

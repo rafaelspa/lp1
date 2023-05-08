@@ -26,8 +26,8 @@ public class AdministradorController {
 
     @GetMapping
     public ResponseEntity<List<Administrador>> findAll() {
-        List<Administrador> administrador = administradorService.findAll();
-        return ResponseEntity.ok(administrador);
+        List<Administrador> administradores = administradorService.findAll();
+        return ResponseEntity.ok(administradores);
     }
 
     @PostMapping

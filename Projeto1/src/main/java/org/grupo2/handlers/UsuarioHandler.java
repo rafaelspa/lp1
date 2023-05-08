@@ -8,7 +8,7 @@ import org.grupo2.modelos.Cliente;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ClienteHandler implements HttpHandler {
+public class UsuarioHandler implements HttpHandler {
 
     private static Integer proximoId = 2;
 
@@ -17,91 +17,89 @@ public class ClienteHandler implements HttpHandler {
         String requestMethod = exchange.getRequestMethod();
         String path = exchange.getRequestURI().getPath();
         String[] pathParts = path.split("/");
-        if (pathParts.length == 3 && "clientes".equals(pathParts[1])) {
+        if (pathParts.length == 3 && "usuarios".equals(pathParts[1])) {
             Integer id = Integer.parseInt(pathParts[2]);
             if ("GET".equals(requestMethod)) {
-                handleGetCliente(exchange, id);
+//                handleGetUsuario(exchange, id);
+                handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
             } else if ("DELETE".equals(requestMethod)) {
-                handleDeleteCliente(exchange, id);
+//                handleDeleteUsuario(exchange, id);
+                handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
             } else if ("PUT".equals(requestMethod)) {
-                handlePutCliente(exchange, id);
+//                handlePutUsuario(exchange, id);
+                handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
             }
         } else if ("GET".equals(requestMethod)) {
-            handleGetClientes(exchange);
+            try {
+                handleGetUsuarios(exchange);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else if ("POST".equals(requestMethod)) {
-            handlePostCliente(exchange);
+//            handlePostUsuario(exchange);
+            handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
         } else {
             handleBadRequest(exchange, "Requisicao inválida: " + requestMethod + " " + path);
         }
     }
 
-    // CREATE
-    private void handlePostCliente(HttpExchange exchange) throws IOException {
-        String requestBody = new String(exchange.getRequestBody().readAllBytes());
-        Cliente cliente = Cliente.fromJson(requestBody);
-        cliente.setId(proximoId);
-        proximoId++;
-        Biblioteca.getClientes().put(cliente.getId(), cliente);
-        sendResponse(exchange, cliente.toJson(), 201);
-    }
+//    // CREATE
+//    private void handlePostUsuario(HttpExchange exchange) throws IOException {
+//        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+//        Cliente cliente = Cliente.fromJson(requestBody);
+//        cliente.setId(proximoId);
+//        proximoId++;
+//        Biblioteca.getClientes().put(cliente.getId(), cliente);
+//        sendResponse(exchange, cliente.toJson(), 201);
+//    }
 
     // READ ALL
-    private void handleGetClientes(HttpExchange exchange) throws IOException {
-        StringBuilder response = new StringBuilder();
-        response.append("[");
-        for (Cliente cliente : Biblioteca.getClientes().values()) {
-            response.append(cliente.toJson());
-            response.append(",");
-        }
-        if (Biblioteca.getClientes().size() > 0) {
-            response.deleteCharAt(response.length() - 1);
-        }
-        response.append("]");
-        sendResponse(exchange, response.toString());
+    private void handleGetUsuarios(HttpExchange exchange) throws Exception {
+        sendResponse(exchange, Biblioteca.listarUsuarios().toString());
     }
 
-    // READ
-    private void handleGetCliente(HttpExchange exchange, Integer id) throws IOException {
-        Cliente cliente = Biblioteca.getClientes().get(id);
-        if (cliente == null) {
-            handleNotFound(exchange, "Cliente não encontrado com o id " + id);
-        } else {
-            sendResponse(exchange, cliente.toJson());
-        }
-    }
+//    // READ
+//    private void handleGetUsuario(HttpExchange exchange, Integer id) throws IOException {
+//        Cliente cliente = Biblioteca.getClientes().get(id);
+//        if (cliente == null) {
+//            handleNotFound(exchange, "Cliente não encontrado com o id " + id);
+//        } else {
+//            sendResponse(exchange, cliente.toJson());
+//        }
+//    }
 
-    // UPDATE
-    private void handlePutCliente(HttpExchange exchange, Integer id) throws IOException {
-        Cliente cliente = Biblioteca.getClientes().get(id);
-        if (cliente == null) {
-            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
-        } else {
-            String requestBody = new String(exchange.getRequestBody().readAllBytes());
-            Cliente clienteAtualizado = Cliente.fromJson(requestBody);
-            cliente.setId(clienteAtualizado.getId());
-            cliente.setNome(clienteAtualizado.getNome());
-            cliente.setCpf(clienteAtualizado.getCpf());
-            cliente.setEndereco(clienteAtualizado.getEndereco());
-            cliente.setEmail(clienteAtualizado.getEmail());
-            cliente.setSenha(clienteAtualizado.getSenha());
-            sendResponse(exchange, cliente.toJson());
-        }
-    }
+//    // UPDATE
+//    private void handlePutUsuario(HttpExchange exchange, Integer id) throws IOException {
+//        Cliente cliente = Biblioteca.getClientes().get(id);
+//        if (cliente == null) {
+//            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
+//        } else {
+//            String requestBody = new String(exchange.getRequestBody().readAllBytes());
+//            Cliente clienteAtualizado = Cliente.fromJson(requestBody);
+//            cliente.setId(clienteAtualizado.getId());
+//            cliente.setNome(clienteAtualizado.getNome());
+//            cliente.setCpf(clienteAtualizado.getCpf());
+//            cliente.setEndereco(clienteAtualizado.getEndereco());
+//            cliente.setEmail(clienteAtualizado.getEmail());
+//            cliente.setSenha(clienteAtualizado.getSenha());
+//            sendResponse(exchange, cliente.toJson());
+//        }
+//    }
 
-    // DELETE
-    private void handleDeleteCliente(HttpExchange exchange, Integer id) throws IOException {
-        Cliente cliente = Biblioteca.getClientes().remove(id);
-        if (cliente == null) {
-            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
-        } else {
-            try {
-                System.out.println("DELETE /clientes/" + id + ": Cliente deletado com sucesso.");
-                sendResponse(exchange, "", 204);
-            } catch (IOException e) {
-                throw new IOException();
-            }
-        }
-    }
+//    // DELETE
+//    private void handleDeleteUsuario(HttpExchange exchange, Integer id) throws IOException {
+//        Cliente cliente = Biblioteca.getClientes().remove(id);
+//        if (cliente == null) {
+//            handleNotFound(exchange, "Cliente não encontrado com ID: " + id);
+//        } else {
+//            try {
+//                System.out.println("DELETE /clientes/" + id + ": Cliente deletado com sucesso.");
+//                sendResponse(exchange, "", 204);
+//            } catch (IOException e) {
+//                throw new IOException();
+//            }
+//        }
+//    }
 
     private void handleNotFound(HttpExchange exchange, String s) throws IOException {
         sendResponse(exchange, s, 404);

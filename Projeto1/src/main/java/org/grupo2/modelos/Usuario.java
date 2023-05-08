@@ -1,6 +1,7 @@
 package org.grupo2.modelos;
 
-import java.util.Optional;
+import java.time.Instant;
+import java.util.Objects;
 
 public abstract class Usuario {
     private String nome;
@@ -8,6 +9,9 @@ public abstract class Usuario {
     private String endereco;
     private String email;
     private String senha;
+
+    public Usuario() {
+    }
 
     public Usuario(String nome, String cpf, String endereco, String email, String senha) {
         this.nome = nome;
@@ -57,22 +61,21 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public void emprestarLivro(int idEmprestimo, Livro livro, Cliente cliente) throws Exception {
-        if (Biblioteca.existeEmprestimoPorId(idEmprestimo)) {
-            throw new Exception("Emprestimo já existente.");
+    public Emprestimo realizarEmprestimo(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
+        try {
+            Biblioteca.existeEmprestimoPorId(id);
+            livro.emprestar();
+            if (Reserva.existeReservaPorLivroECliente(livro, cliente)) {
+                cancelarReserva(livro, cliente);
+            }
+            return Biblioteca.salvarEmprestimo(new Emprestimo(id, livro, cliente, dataEmprestimo, dataDevolucao));
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
-        if (livro.getNumExemplaresDisponiveis() > 0) {
-            throw new Exception("Não há exemplares disponíveis.");
-        }
-        if (Reserva.existeReservaPorLivroECliente(livro, cliente)) {
-            cancelarReserva(livro, cliente);
-        }
-        Emprestimo emprestimo = new Emprestimo(idEmprestimo, livro, cliente);
-        Biblioteca.salvarEmprestimo(emprestimo);
-        System.out.println("Emprestimo realizado com sucesso");
     }
 
-    public void devolverLivro(Livro livro) throws Exception {
+
+    public static void devolverLivro(Livro livro) throws Exception {
         if (Livro.devolver(livro)) {
             System.out.println("Livro devolvido!");
         } else {
@@ -80,19 +83,19 @@ public abstract class Usuario {
         }
     }
 
-    public void reservarLivro(int id, Livro livro, Cliente cliente) throws Exception {
-        if (!Livro.livroDisponivel(livro)) {
-            throw new Exception("Não há exemplares disponíveis.");
-        }
-        Reserva reserva = new Reserva(id, livro, cliente);
-        Biblioteca.salvarReserva(reserva);
-        System.out.println("Livro reservado.");
-    }
+//    public void reservarLivro(int id, Livro livro, Cliente cliente) throws Exception {
+//        if (!Livro.livroDisponivel(livro)) {
+//            throw new Exception("Não há exemplares disponíveis.");
+//        }
+//        Reserva reserva = new Reserva(id, livro, cliente);
+//        Biblioteca.salvarReserva(reserva);
+//        System.out.println("Livro reservado.");
+//    }
 
-    public void cancelarReserva(Livro livro, Cliente cliente) throws Exception {
-        Optional<Reserva> reservaOptional = Biblioteca.procurarReservaPorLivroECliente(livro, cliente);
-        reservaOptional.ifPresent(Biblioteca::cancelarReserva);
-        if (reservaOptional.isPresent()) {
+    public static void cancelarReserva(Livro livro, Cliente cliente) throws Exception {
+        Reserva reserva = Biblioteca.procurarReservaPorLivroECliente(livro, cliente);
+        if (Objects.nonNull(reserva)) {
+            reserva.deletarReserva();
             devolverLivro(livro);
         }
     }

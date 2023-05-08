@@ -27,6 +27,10 @@ public class Reserva {
         this.dataFim = dataFim;
     }
 
+    public Reserva() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -81,18 +85,18 @@ public class Reserva {
     }
 
     public static boolean existeReservaPorLivroECliente(Livro livro, Cliente cliente) throws Exception {
-        if (Biblioteca.procurarReservaPorLivroECliente(livro, cliente).isPresent()) {
-            return true;
-        } else {
-            throw new Exception("Não existe essa reserva.");
-        }
+        return Objects.nonNull(Biblioteca.procurarReservaPorLivroECliente(livro, cliente));
     }
 
-    public static boolean existeReservaPorId(int id) throws Exception {
-        if (Biblioteca.procuraReservaPorId(id).isPresent()) {
-            return true;
-        } else {
-            throw new Exception("Não existe essa reserva.");
-        }
+    public void deletarReserva() {
+        Biblioteca.getReservas().remove(getId());
     }
+
+//    public static boolean existeReservaPorId(int id) throws Exception {
+//        if (Biblioteca.procuraReservaPorId(id).isPresent()) {
+//            return true;
+//        } else {
+//            throw new Exception("Não existe essa reserva.");
+//        }
+//    }
 }

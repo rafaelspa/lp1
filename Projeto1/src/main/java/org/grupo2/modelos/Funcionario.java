@@ -1,11 +1,13 @@
 package org.grupo2.modelos;
 
 
-import org.grupo2.interfaces.GerenciamentoDeLivros;
-import org.grupo2.interfaces.GerenciamentoDeUsuarios;
+import java.time.Instant;
 
-public class Funcionario  extends Usuario { // implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
+public class Funcionario extends Usuario { // implements GerenciamentoDeUsuarios, GerenciamentoDeLivros {
     private int id;
+
+    public Funcionario() {
+    }
 
     public Funcionario(int id, String nome, String cpf, String endereco, String email, String senha) {
         super(nome, cpf, endereco, email, senha);
@@ -20,11 +22,12 @@ public class Funcionario  extends Usuario { // implements GerenciamentoDeUsuario
         this.id = id;
     }
 
-    public void realizarEmprestimo(){
-
+    @Override
+    public Emprestimo realizarEmprestimo(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
+        return super.realizarEmprestimo(id, livro, cliente, dataEmprestimo, dataDevolucao);
     }
 
-    public void realizarDevolucao(){
+    public void realizarDevolucao() {
 
     }
 
@@ -35,16 +38,6 @@ public class Funcionario  extends Usuario { // implements GerenciamentoDeUsuario
 //
 //    @Override
 //    public void devolverLivro() {
-//
-//    }
-//
-//    @Override
-//    public void reservarLivro() {
-//
-//    }
-//
-//    @Override
-//    public void cancelarReserva() {
 //
 //    }
 //
@@ -95,14 +88,14 @@ public class Funcionario  extends Usuario { // implements GerenciamentoDeUsuario
     }
 
     public static Funcionario fromJson(String requestBody) {
-        String requestBodyClean = requestBody.replace("{", "").replace("}","");
+        String requestBodyClean = requestBody.replace("{", "").replace("}", "");
         String[] splitProperties = requestBodyClean.split(",");
         int jsonId = Integer.parseInt(splitProperties[0].split(":")[1].trim());
-        String jsonNome = splitProperties[1].split(":")[1].trim().replace("\"","");
-        String jsonCpf = splitProperties[2].split(":")[1].trim().replace("\"","");
-        String jsonEndereco = splitProperties[3].split(":")[1].trim().replace("\"","");
-        String jsonEmail = splitProperties[4].split(":")[1].trim().replace("\"","");
-        String jsonSenha = splitProperties[5].split(":")[1].trim().replace("\"","");
+        String jsonNome = splitProperties[1].split(":")[1].trim().replace("\"", "");
+        String jsonCpf = splitProperties[2].split(":")[1].trim().replace("\"", "");
+        String jsonEndereco = splitProperties[3].split(":")[1].trim().replace("\"", "");
+        String jsonEmail = splitProperties[4].split(":")[1].trim().replace("\"", "");
+        String jsonSenha = splitProperties[5].split(":")[1].trim().replace("\"", "");
         return new Funcionario(jsonId, jsonNome, jsonCpf, jsonEndereco, jsonEmail, jsonSenha);
     }
 }

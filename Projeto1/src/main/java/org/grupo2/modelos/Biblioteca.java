@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 
+import static java.util.Optional.empty;
+
 public class Biblioteca {
     private final static Integer idLivros = 0;
     private final static Integer idUsuarios = 0;
@@ -19,6 +21,7 @@ public class Biblioteca {
     private static Map<Integer, Administrador> administradores = new HashMap<Integer, Administrador>();
     private static Map<Integer, Emprestimo> emprestimos = new HashMap<Integer, Emprestimo>();
     private static Map<Integer, Reserva> reservas = new HashMap<Integer, Reserva>();
+    private static Map<Integer, Usuario> usuarios = new HashMap<>();
 
     private static final int PORT = 8080;
 
@@ -28,22 +31,23 @@ public class Biblioteca {
         clientes.put(1, cliente1);
 
         // Funcionarios
-        funcionarios.put(1, new Funcionario(1,"Nome Funcionario 1", "200.000.000-01", "Endereco Funcionario 1", "funcionario1@email.com", "senha_funcionario1"));
+        funcionarios.put(1, new Funcionario(1, "Nome Funcionario 1", "200.000.000-01", "Endereco Funcionario 1", "funcionario1@email.com", "senha_funcionario1"));
 
         // Administradores
-        administradores.put(1, new Administrador(1,"Nome Administrador 1", "300.000.000-01", "Endereco Administrador 1", "administrador1@email.com", "senha_administrador1"));
+        administradores.put(1, new Administrador(1, "Nome Administrador 1", "300.000.000-01", "Endereco Administrador 1", "administrador1@email.com", "senha_administrador1"));
 
         // Livros
         Livro livro1 = new Livro(1, "Harry Potter e a Pedra Filosofal", "J.K Rowling", "Rocco", 1997, 12, 12);
         livros.put(1, livro1);
-        livros.put(2,  new Livro(2,"Harry Potter e a Camara Secreta","J.K Rowling","Rocco",1998,10,10));
-        livros.put(3,  new Livro(3,"Harry Potter e o Prisioneiro de Azkaban","J.K Rowling","Rocco",1999,13,9));
+        livros.put(2, new Livro(2, "Harry Potter e a Camara Secreta", "J.K Rowling", "Rocco", 1998, 10, 10));
+        livros.put(3, new Livro(3, "Harry Potter e o Prisioneiro de Azkaban", "J.K Rowling", "Rocco", 1999, 13, 9));
 
         // Emprestimos
         emprestimos.put(1, new Emprestimo(1, livro1, cliente1));
 
         // start server
         HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
+        server.createContext("/usuarios", new UsuarioHandler());
         server.createContext("/clientes", new ClienteHandler());
         server.createContext("/funcionarios", new FuncionarioHandler());
         server.createContext("/administradores", new AdministradorHandler());
@@ -54,6 +58,8 @@ public class Biblioteca {
         System.out.println("\nServidor iniciado na porta " + PORT + ".");
 
         // Chamando Consumidores
+        System.out.println("\n*** ACTIONS DO MODELO Usuario ***");
+        ConsumidorUsuario.main(null);
         System.out.println("\n*** ACTIONS DO MODELO Cliente ***");
         ConsumidorCliente.main(null);
         System.out.println("\n*** ACTIONS DO MODELO Funcionario ***");
@@ -94,81 +100,214 @@ public class Biblioteca {
         return administradores;
     }
 
-    public Livro retornaLivro(String nome) {
-        // TODO: 24/04/2023
+    public static void setLivros(Map<Integer, Livro> livros) {
+        Biblioteca.livros = livros;
+    }
+
+    public static void setClientes(Map<Integer, Cliente> clientes) {
+        Biblioteca.clientes = clientes;
+    }
+
+    public static void setFuncionarios(Map<Integer, Funcionario> funcionarios) {
+        Biblioteca.funcionarios = funcionarios;
+    }
+
+    public static void setAdministradores(Map<Integer, Administrador> administradores) {
+        Biblioteca.administradores = administradores;
+    }
+
+    public static void setEmprestimos(Map<Integer, Emprestimo> emprestimos) {
+        Biblioteca.emprestimos = emprestimos;
+    }
+
+    public static void setReservas(Map<Integer, Reserva> reservas) {
+        Biblioteca.reservas = reservas;
+    }
+
+    public static void setUsuarios(Map<Integer, Usuario> usuarios) {
+        Biblioteca.usuarios = usuarios;
+    }
+
+    public static Livro retornaLivro(String titulo) {
+        for (int i = 0; i < getLivros().values().size(); i++) {
+            if (getLivros().get(i).getTitulo().equals(titulo)) {
+                return getLivros().get(i);
+            }
+        }
         return null;
     }
 
-    public void listarLivros() {
-        // TODO: 24/04/2023
+    public static StringBuilder listarEmprestimos() {
+        StringBuilder response = new StringBuilder();
+        response.append("[");
+        for (Emprestimo emprestimo : Biblioteca.getEmprestimos().values()) {
+            response.append(emprestimo.toJson());
+            response.append(",");
+        }
+        if (Biblioteca.getEmprestimos().size() > 0) {
+            response.deleteCharAt(response.length() - 1);
+        }
+        response.append("]");
+        return response;
     }
 
-    public Usuario buscarUsuarioNome(String nome) {
-        // TODO: 24/04/2023
-        return null;
+    public static StringBuilder listarLivros() {
+        StringBuilder response = new StringBuilder();
+        response.append("[");
+        for (Livro livro : Biblioteca.getLivros().values()) {
+            response.append(livro.toJson());
+            response.append(",");
+        }
+        if (Biblioteca.getLivros().size() > 0) {
+            response.deleteCharAt(response.length() - 1);
+        }
+        response.append("]");
+        return response;
     }
 
-    public Usuario buscarUsuarioCpf(String cpf) {
-        // TODO: 24/04/2023
-        return null;
+    //    public void buscarUsuarioNome(String nome) {
+//        try {
+//            for (int i = 0; i < usuarios.size(); i++) {
+//                if (nome.equalsIgnoreCase(usuarios.get(i).getNome())) {
+//                    System.out.println("Usuário encontrado!" + "\n Nome:" + usuarios.get(i).getNome() +
+//                            "\n Email :" + usuarios.get(i).getEmail());
+//                }
+//            }
+//        } catch (Exception error) {
+//            System.out.println("Usuaŕio não encontrado");
+//        }
+//    }
+//
+//    public void buscarUsuarioCpf(String cpf) {
+//        try {
+//            for (int i = 0; i < usuarios.size(); i++) {
+//                if(cpf.equalsIgnoreCase(usuarios.get(i).getCpf())) {
+//                    System.out.println("Usuário encontrado!" + "\n Nome:" + usuario.get(i).getNome() +
+//                            "\n Email :"+ usuario.get(i).getEmail() + "\n CPF:" + usuario.get(i).getCpf());
+//                }
+//            }
+//        }
+//        catch (Exception error) {
+//            System.out.println("Usuaŕio não encontrado");
+//        }
+//    }
+//
+    public static StringBuilder listarUsuarios() throws Exception {
+        StringBuilder response = new StringBuilder();
+        response.append("[");
+        for (Cliente cliente : Biblioteca.getClientes().values()) {
+            response.append(cliente.toJson());
+            response.append(",");
+        }
+        for (Funcionario funcionario : Biblioteca.getFuncionarios().values()) {
+            response.append(funcionario.toJson());
+            response.append(",");
+        }
+        for (Administrador administrador : Biblioteca.getAdministradores().values()) {
+            response.append(administrador.toJson());
+            response.append(",");
+        }
+        if (Biblioteca.getClientes().size() > 0) {
+            response.deleteCharAt(response.length() - 1);
+        }
+        response.append("]");
+        return response;
     }
 
-    public void listarUsuarios() {
-        // TODO: 24/04/2023
+    public static StringBuilder listarClientes() {
+        StringBuilder response = new StringBuilder();
+        response.append("[");
+        for (Cliente cliente : Biblioteca.getClientes().values()) {
+            response.append(cliente.toJson());
+            response.append(",");
+        }
+        if (Biblioteca.getClientes().size() > 0) {
+            response.deleteCharAt(response.length() - 1);
+        }
+        response.append("]");
+        return response;
     }
 
-    public void listarClientes() {
-        // TODO: 24/04/2023
-    }
-
-    public void listarFuncionarios() {
-        // TODO: 24/04/2023
-    }
-
-    public void listarEmprestimos() {
-        // TODO: 24/04/2023
+    public static StringBuilder listarFuncionarios() {
+        StringBuilder response = new StringBuilder();
+        response.append("[");
+        for (Funcionario funcionario : Biblioteca.getFuncionarios().values()) {
+            response.append(funcionario.toJson());
+            response.append(",");
+        }
+        if (Biblioteca.getFuncionarios().size() > 0) {
+            response.deleteCharAt(response.length() - 1);
+        }
+        response.append("]");
+        return response;
     }
 
     public void listarEmprestimosCliente(Cliente cliente) {
-        // TODO: 24/04/2023
+        List<Emprestimo> emprestimoList = getEmprestimos()
+                .values().
+                stream().
+                filter(emprestimo -> emprestimo.getCliente().equals(cliente))
+                .toList();
+        emprestimoList.forEach(System.out::println);
     }
 
-    public void listarEmprestimosData(Date data) {
-        // TODO: 24/04/2023
+//    // Lista os emprestimos em uma data
+//    public void listarEmprestimosData(Instant data) {
+//        try {
+//            for (int i = 0; i < emprestimos.size(); i++) {
+//                if (Objects.equals(data, emprestimos.get(i).getDataEmprestimo())) {
+//                    System.out.println("Livro :" + emprestimos.get(i).getLivro() + "\n Data empréstimo:" +
+//                            emprestimos.get(i).getDataEmprestimo());
+//
+//                }
+//            }
+//        }
+//        catch (Exception erroData ) {
+//            throw new Exception("Data de emprestimo não encontrada");
+//        }
+//    }
+//
+//    public void login(String cpf, String senha) {
+//        for (int i = 0; i < usuario.size(); i++) {
+//            if (usuario.get(i).getSenha().equals(senha) && usuario.get(i).getCpf().equals(cpf)) {
+//                System.out.println("Usuário autenticado");
+//                break;
+//            }
+//
+//        }
+//    }
+//
+    public static boolean existeEmprestimoPorId(int id) throws Exception {
+        if (Objects.nonNull(emprestimos.get(id))) {
+            throw new Exception("Emprestimo já existente.");
+        }
+        return true;
     }
 
-    public void login(String cpf, String senha) {
-        // TODO: 24/04/2023
+    public static Emprestimo salvarEmprestimo(Emprestimo emprestimo) {
+        getEmprestimos().put(emprestimo.getId(), emprestimo);
+        return emprestimo;
     }
 
-    public static boolean existeEmprestimoPorId(int id) {
-        return Objects.nonNull(emprestimos.get(id));
-    }
-
-    public static void salvarEmprestimo(Emprestimo emprestimo) {
-        emprestimos.put(Biblioteca.idEmprestimos + 1, emprestimo);
-    }
-
-    public static void salvarReserva(Reserva reserva) {
-        reservas.put(Biblioteca.idReservas + 1, reserva);
-    }
-
-    public static Optional<Reserva> procurarReservaPorLivroECliente(Livro livro, Cliente cliente) {
-        Optional<Reserva> reservaOptional = Optional.empty();
-        for (int i = 1; i < reservas.size() + 1; i++) {
-            if (reservas.get(i).getLivro().equals(livro) && reservas.get(i).getCliente().equals(cliente)) {
-                reservaOptional = Optional.of(reservas.get(i));
-                break;
+//    public static void salvarReserva(Reserva reserva) {
+//        reservas.put(Biblioteca.idReservas + 1, reserva);
+//    }
+//
+    public static Reserva procurarReservaPorLivroECliente(Livro livro, Cliente cliente) {
+        for (int i = 1; i < getReservas().size() + 1; i++) {
+            if (getReservas().get(i).getLivro().equals(livro) && reservas.get(i).getCliente().equals(cliente)) {
+               return reservas.get(i);
             }
         }
-        return reservaOptional;
+        return null;
     }
-
-    public static Optional<Reserva> procuraReservaPorId(int id) {
-        return Optional.of(reservas.get(id));
-    }
-
+//
+//    public static Optional<Reserva> procuraReservaPorId(int id) {
+//        return Optional.of(reservas.get(id));
+//    }
+//
     public static void cancelarReserva(Reserva reserva) {
         reservas.remove(reserva.getId());
     }
+//}
 }

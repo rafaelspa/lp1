@@ -90,8 +90,12 @@ public class Livro {
         return Objects.hash(id, titulo, autor, editora, anoPublicacao, numExemplares, numExemplaresDisponiveis);
     }
 
-    public void emprestar() {
-        //TODO
+    public void emprestar() throws Exception{
+        if (getNumExemplaresDisponiveis() > 0) {
+            setNumExemplaresDisponiveis(getNumExemplaresDisponiveis() - 1);
+        } else {
+            throw new Exception("Não há exemplares disponíveis para empréstimo.");
+        }
     }
 
     public static boolean devolver(Livro livro) throws Exception {

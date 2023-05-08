@@ -53,4 +53,8 @@ public class FuncionarioService {
             throw new DatabaseException("Esse recurso eh referenciado por outro");
         }
     }
+
+    public Funcionario findByName(String nome) {
+        return funcionarioRepository.findFuncionarioByNome(nome);
+    }
 }

@@ -2,6 +2,7 @@ package com.grupo2.biblioteca_api.usuario.administrador;
 
 import com.grupo2.biblioteca_api.common.exceptions.DatabaseException;
 import com.grupo2.biblioteca_api.common.exceptions.ResourceNotFoundException;
+import com.grupo2.biblioteca_api.usuario.cliente.Cliente;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -50,5 +51,9 @@ public class AdministradorService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Esse recurso eh referenciado por outro");
         }
+    }
+
+    public Administrador findByName(String nome) {
+         return administradorRepository.findAdministradorByNome(nome);
     }
 }

@@ -51,4 +51,8 @@ public class ClienteService {
             throw new DatabaseException("Esse recurso eh referenciado por outro");
         }
     }
+
+    public Cliente findByName(String nome) {
+        return clienteRepository.findClienteByNome(nome);
+    }
 }

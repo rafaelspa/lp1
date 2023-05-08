@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,12 @@ public class EmprestimoService {
         }
     }
 
-    public ArrayList<Emprestimo> findAllByCliente(Cliente cliente) {
-        ArrayList<Emprestimo> listaEmprestimo = (ArrayList<Emprestimo>) emprestimoRepository.findAllByCliente(cliente);
-        return listaEmprestimo;
+    public List<Emprestimo> findAllByCliente(Cliente cliente) {
+        return emprestimoRepository.findAllByCliente(cliente);
+    }
+
+    public List<Emprestimo> findAllByDate(Instant to) {
+        Instant now = Instant.now();
+        return emprestimoRepository.findAllByDataEmprestimoIsBeforeAndDataDevolucaoIsAfter(Instant.now(), to);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -46,9 +47,15 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoAtualizado);
     }
 
-    @GetMapping
+    @GetMapping(value = "/cliente")
     public ResponseEntity<List<Emprestimo>> findByClient(@Valid @RequestBody Cliente cliente) {
         List<Emprestimo> listaEmprestimo = emprestimoService.findAllByCliente(cliente);
+        return ResponseEntity.ok(listaEmprestimo);
+    }
+
+    @GetMapping(value = "/data")
+    public ResponseEntity<List<Emprestimo>> findByDate(@Valid @RequestBody Instant to) {
+        List<Emprestimo> listaEmprestimo = emprestimoService.findAllByDate(to);
         return ResponseEntity.ok(listaEmprestimo);
     }
 }

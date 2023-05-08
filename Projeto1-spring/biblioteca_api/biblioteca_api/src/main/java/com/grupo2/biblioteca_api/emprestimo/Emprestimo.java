@@ -18,7 +18,8 @@ import java.util.UUID;
 @Setter
 public class Emprestimo {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @ManyToOne
     private Livro livro;
     @ManyToOne
@@ -27,7 +28,6 @@ public class Emprestimo {
     private Instant dataDevolucao;
 
     public Emprestimo(Livro livro, Cliente cliente) {
-        this.id = UUID.randomUUID();
         this.livro = livro;
         this.cliente = cliente;
         this.dataEmprestimo = Instant.now();

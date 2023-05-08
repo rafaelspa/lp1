@@ -39,7 +39,7 @@ public class LivroService {
             livro.setEditora(livroAtualizado.getEditora());
             livro.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
             livro.setNumExemplares(livroAtualizado.getNumExemplares());
-            livro.setNumExemplaresDisponiveis(livro.getNumExemplaresDisponiveis());
+            livro.setNumExemplaresDisponiveis(livroAtualizado.getNumExemplaresDisponiveis());
             return livroRepository.save(livro);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Livro não encontrado.");

@@ -22,10 +22,22 @@ public class UsuarioService {
     private FuncionarioService funcionarioService;
     private AdministradorService administradorService;
 
-    public Usuario buscarUsuarioPorNome(String nome) {
+    public Usuario findUsuarioByName(String nome) {
         Usuario usuarioCliente = clienteService.findByName(nome);
         Usuario usuarioFuncionario = funcionarioService.findByName(nome);
         Usuario usuarioAdministrador = administradorService.findByName(nome);
+        return Objects.nonNull(usuarioCliente) ? usuarioCliente
+                : Objects.nonNull(usuarioFuncionario)
+                ? usuarioFuncionario
+                : Objects.nonNull(usuarioAdministrador)
+                ? usuarioAdministrador
+                : null;
+    }
+
+    public Usuario findUsuarioByCpf(String cpf) {
+        Usuario usuarioCliente = clienteService.findByCpf(cpf);
+        Usuario usuarioFuncionario = funcionarioService.findByCpf(cpf);
+        Usuario usuarioAdministrador = administradorService.findByCpf(cpf);
         return Objects.nonNull(usuarioCliente) ? usuarioCliente
                 : Objects.nonNull(usuarioFuncionario)
                 ? usuarioFuncionario

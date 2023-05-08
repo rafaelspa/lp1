@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
     @Query("SELECT c FROM Cliente c WHERE  c.nome LIKE %?1%")
     Cliente findClienteByNome(String nome);
+    @Query("SELECT c FROM Cliente c WHERE  c.cpf LIKE %?1%")
     Cliente findClienteByCpf(String cpf);
 }

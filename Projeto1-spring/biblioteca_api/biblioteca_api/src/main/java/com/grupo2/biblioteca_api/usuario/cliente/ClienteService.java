@@ -2,6 +2,7 @@ package com.grupo2.biblioteca_api.usuario.cliente;
 
 import com.grupo2.biblioteca_api.common.exceptions.DatabaseException;
 import com.grupo2.biblioteca_api.common.exceptions.ResourceNotFoundException;
+import com.grupo2.biblioteca_api.usuario.Usuario;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -54,5 +55,9 @@ public class ClienteService {
 
     public Cliente findByName(String nome) {
         return clienteRepository.findClienteByNome(nome);
+    }
+
+    public Usuario findByCpf(String cpf) {
+        return clienteRepository.findClienteByCpf(cpf);
     }
 }

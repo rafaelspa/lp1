@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
     @Query("SELECT f FROM Funcionario f WHERE  f.nome LIKE %?1%")
     Funcionario findFuncionarioByNome(String nome);
+    @Query("SELECT f FROM Funcionario f WHERE  f.cpf LIKE %?1%")
+    Funcionario findFuncionarioByCpf(String cpf);
 }

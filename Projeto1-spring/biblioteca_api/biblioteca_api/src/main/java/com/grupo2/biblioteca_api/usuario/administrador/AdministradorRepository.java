@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface AdministradorRepository extends JpaRepository<Administrador, Integer> {
     @Query("SELECT a FROM Administrador a WHERE  a.nome LIKE %:nome%")
     Administrador findAdministradorByNome(String nome);
+    @Query("SELECT a FROM Administrador a WHERE  a.cpf LIKE %:cpf%")
+    Administrador findAdministradorByCpf(String cpf);
 }

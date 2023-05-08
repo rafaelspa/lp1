@@ -33,4 +33,6 @@ public class Cliente extends Usuario {
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
     }
+
+
 }

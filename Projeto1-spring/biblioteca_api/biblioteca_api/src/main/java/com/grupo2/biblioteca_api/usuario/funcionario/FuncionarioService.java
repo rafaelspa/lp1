@@ -2,6 +2,7 @@ package com.grupo2.biblioteca_api.usuario.funcionario;
 
 import com.grupo2.biblioteca_api.common.exceptions.DatabaseException;
 import com.grupo2.biblioteca_api.common.exceptions.ResourceNotFoundException;
+import com.grupo2.biblioteca_api.usuario.Usuario;
 import com.grupo2.biblioteca_api.usuario.administrador.Administrador;
 import com.grupo2.biblioteca_api.usuario.administrador.AdministradorRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -56,5 +57,9 @@ public class FuncionarioService {
 
     public Funcionario findByName(String nome) {
         return funcionarioRepository.findFuncionarioByNome(nome);
+    }
+
+    public Usuario findByCpf(String cpf) {
+        return funcionarioRepository.findFuncionarioByCpf(cpf);
     }
 }

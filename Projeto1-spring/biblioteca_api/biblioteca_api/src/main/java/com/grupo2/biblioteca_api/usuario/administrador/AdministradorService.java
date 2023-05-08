@@ -2,6 +2,7 @@ package com.grupo2.biblioteca_api.usuario.administrador;
 
 import com.grupo2.biblioteca_api.common.exceptions.DatabaseException;
 import com.grupo2.biblioteca_api.common.exceptions.ResourceNotFoundException;
+import com.grupo2.biblioteca_api.usuario.Usuario;
 import com.grupo2.biblioteca_api.usuario.cliente.Cliente;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -55,5 +56,9 @@ public class AdministradorService {
 
     public Administrador findByName(String nome) {
          return administradorRepository.findAdministradorByNome(nome);
+    }
+
+    public Administrador findByCpf(String cpf) {
+        return administradorRepository.findAdministradorByCpf(cpf);
     }
 }

@@ -2,13 +2,13 @@ package com.grupo2.biblioteca_api.emprestimo;
 
 import com.grupo2.biblioteca_api.common.exceptions.DatabaseException;
 import com.grupo2.biblioteca_api.common.exceptions.ResourceNotFoundException;
-import com.grupo2.biblioteca_api.livro.Livro;
-import com.grupo2.biblioteca_api.livro.LivroRepository;
+import com.grupo2.biblioteca_api.usuario.cliente.Cliente;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,5 +52,10 @@ public class EmprestimoService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Esse recurso eh referenciado por outro");
         }
+    }
+
+    public ArrayList<Emprestimo> findAllByCliente(Cliente cliente) {
+        ArrayList<Emprestimo> listaEmprestimo = (ArrayList<Emprestimo>) emprestimoRepository.findAllByCliente(cliente);
+        return listaEmprestimo;
     }
 }

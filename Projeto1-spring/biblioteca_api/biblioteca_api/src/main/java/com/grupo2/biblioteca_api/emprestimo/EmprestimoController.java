@@ -1,5 +1,7 @@
 package com.grupo2.biblioteca_api.emprestimo;
 
+import com.grupo2.biblioteca_api.usuario.Usuario;
+import com.grupo2.biblioteca_api.usuario.cliente.Cliente;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +44,11 @@ public class EmprestimoController {
     public ResponseEntity<Emprestimo> update(@PathVariable Integer id, @Valid @RequestBody Emprestimo emprestimoAtualizado) {
         emprestimoAtualizado = emprestimoService.update(id, emprestimoAtualizado);
         return ResponseEntity.ok(emprestimoAtualizado);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Emprestimo>> findByClient(@Valid @RequestBody Cliente cliente) {
+        List<Emprestimo> listaEmprestimo = emprestimoService.findAllByCliente(cliente);
+        return ResponseEntity.ok(listaEmprestimo);
     }
 }

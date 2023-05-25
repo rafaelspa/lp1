@@ -63,31 +63,4 @@ public class FichaPaciente {
     public static String toGenero(char genero) {
         return genero == 'F' ? "Feminino": "Masculino";
     }
-
-    public void saveInMemory() {
-        try {
-            Files.createDirectories(Paths.get("./fichas"));
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream( "./fichas/" + decompose(nomeCompleto.replace(" ","-").toLowerCase()) + ".txt"), "UTF-8");
-            BufferedWriter bufWriter = new BufferedWriter(writer);
-            bufWriter.write("Ficha Médica\n\n");
-            bufWriter.write("Nome: " + nomeCompleto);
-            bufWriter.newLine();
-            bufWriter.write("Idade: " + idade + (idade != 1 ? " anos" : " ano"));
-            bufWriter.newLine();
-            bufWriter.write("Gênero: " + genero);
-            bufWriter.newLine();
-            bufWriter.write("Altura: " + altura + " m");
-            bufWriter.newLine();
-            bufWriter.write("Peso: " + peso + " Kg");
-            bufWriter.close();
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String decompose(String s) {
-        return java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+","");
-    }
 }

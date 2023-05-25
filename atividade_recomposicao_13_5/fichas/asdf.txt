@@ -1,7 +1,0 @@
-Ficha Médica
-
-Nome: asdf
-Idade: 1 ano
-Gênero: Feminino
-Altura: 1.0 m
-Peso: 1.0 Kg

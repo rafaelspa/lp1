@@ -11,7 +11,7 @@ public class ServicoFichaPaciente {
     public ServicoFichaPaciente() {
     }
 
-    public void ccriarFichaPaciente() {
+    public void criarFichaPaciente() {
         char generoPaciente;
         System.out.println("# #");
         System.out.print("CRIAÇÃO DE FICHA DE PACIENTE\n");
@@ -39,6 +39,12 @@ public class ServicoFichaPaciente {
                 alturaPaciente, pesoPaciente);
 
         saveInMemory(fichaPaciente);
+    }
+
+    public void atualizarFichaPaciente() {
+    }
+
+    public void verFichaPaciente() {
     }
 
     public void saveInMemory(FichaPaciente fichaPaciente) {

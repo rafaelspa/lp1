@@ -2,33 +2,22 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FichaPaciente {
-    private int id;
     private String nomeCompleto;
     private int idade;
     private String genero;
     private double altura;
     private double peso;
 
-    public FichaPaciente(int id, String nomeCompleto, int idade, String genero, double altura, double peso) {
-        this.id = id;
+    public FichaPaciente(String nomeCompleto, int idade, String genero, double altura, double peso) {
         this.nomeCompleto = nomeCompleto;
         this.idade = idade;
         this.genero = genero;
         this.altura = altura;
         this.peso = peso;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNomeCompleto() {

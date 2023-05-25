@@ -1,0 +1,7 @@
+Ficha Médica
+
+Nome: João Romão
+Idade: 1 ano
+Gênero: Masculino
+Altura: 1.0 m
+Peso: 1.0 Kg

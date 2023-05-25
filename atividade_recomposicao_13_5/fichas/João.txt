@@ -1,0 +1,7 @@
+Ficha M?dica
+
+Nome: Jo?o
+Idade: 1 ano
+G?nero: Masculino
+Altura: 1.0 m
+Peso: 1.0 Kg

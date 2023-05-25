@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -77,7 +78,7 @@ public class FichaPaciente {
     public void saveInMemory() {
         try {
             Files.createDirectories(Paths.get("./fichas"));
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream( "./fichas/" + nomeCompleto.replace(" ","") + ".txt"), "UTF-8");
+            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream( "./fichas/" + decompose(nomeCompleto.replace(" ","-").toLowerCase()) + ".txt"), "UTF-8");
             BufferedWriter bufWriter = new BufferedWriter(writer);
             bufWriter.write("Ficha Médica\n\n");
             bufWriter.write("Nome: " + nomeCompleto);
@@ -95,5 +96,9 @@ public class FichaPaciente {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String decompose(String s) {
+        return java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+","");
     }
 }

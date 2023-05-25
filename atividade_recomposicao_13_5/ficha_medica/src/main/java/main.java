@@ -1,13 +1,13 @@
-import java.io.*;
 import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         char generoPaciente;
-
-        System.out.println("FICHA PACIENTE\n");
-        System.out.print("Nome do paciente: ");
+        System.out.println("# #");
+        System.out.print("CRIAÇÃO DE FICHA DE PACIENTE\n");
+        System.out.println("# #\n");
+        System.out.print("Nome completo do paciente: ");
         String nomePaciente = sc.nextLine();
         System.out.print("Idade do paciente (anos): ");
         int idadePaciente = sc.nextInt();
@@ -18,35 +18,18 @@ public class main {
             if (generoPaciente == 'M' || generoPaciente == 'F') {
                 break;
             }
-            System.out.println("Erro: M ou F");
+            System.out.println("Aviso: M ou F");
         }
-        System.out.print("Altura do paciente: ");
+        System.out.print("Altura do paciente (use vírgula): ");
         Double alturaPaciente = sc.nextDouble();
-        System.out.print("Peso do paciente (Kg): ");
+        System.out.print("Peso do paciente (em Kg, use vírgula): ");
         Double pesoPaciente = sc.nextDouble();
 
+        FichaPaciente fichaPaciente1 = new FichaPaciente(1, nomePaciente,
+                idadePaciente, FichaPaciente.toGenero(generoPaciente),
+                alturaPaciente, pesoPaciente);
 
-        try {
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("ficha_medica_" + nomePaciente.split(" ")[0] + ".txt"), "UTF-8");
-            BufferedWriter bufWriter = new BufferedWriter(writer);
-            bufWriter.write("Ficha Médica\n\n");
-            bufWriter.write("Nome: " + nomePaciente);
-            bufWriter.newLine();
-            bufWriter.write("Idade: " + idadePaciente + " ano(s)");
-            bufWriter.newLine();
-            bufWriter.write("Gênero: " + (generoPaciente == 'M' ? "Masculino" : "Feminino"));
-            bufWriter.newLine();
-            bufWriter.write("Altura: " + alturaPaciente + " m");
-            bufWriter.newLine();
-            bufWriter.write("Peso: " + pesoPaciente + " Kg");
-            bufWriter.close();
-            writer.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        fichaPaciente1.saveInMemory();
 
         sc.close();
     }

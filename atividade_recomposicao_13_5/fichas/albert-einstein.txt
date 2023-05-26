@@ -1,0 +1,7 @@
+Ficha Médica
+
+Nome: Albert Einstein
+Idade: 143 anos
+Gênero: Masculino
+Altura: 1.7 m
+Peso: 70.0 Kg

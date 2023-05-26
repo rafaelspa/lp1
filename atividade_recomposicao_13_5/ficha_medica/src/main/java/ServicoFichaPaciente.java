@@ -8,15 +8,18 @@ import java.util.regex.Pattern;
 public class ServicoFichaPaciente {
     static Scanner sc = new Scanner(System.in);
     char generoPaciente;
+    // array constante com os dados da ficha
     final String[] ATRIBUTOS = {"a idade", "o genero", "a altura", "o peso"};
 
     public ServicoFichaPaciente() {
     }
 
     public void criarFichaPaciente() {
+        // Enunciado
         System.out.println("# #");
         System.out.print("CRIAÇÃO DE FICHA DE PACIENTE\n");
         System.out.println("# #\n");
+        // Entrada dos dados
         System.out.print("Nome completo do paciente: ");
         String nomePaciente = sc.nextLine();
         System.out.print("Idade do paciente (anos): ");
@@ -35,36 +38,47 @@ public class ServicoFichaPaciente {
         System.out.print("Peso do paciente (em Kg, use vírgula): ");
         double pesoPaciente = sc.nextDouble();
 
+        // Instancia um objeto do tipo FichaPaciente
         FichaPaciente fichaPaciente = new FichaPaciente(nomePaciente,
                 idadePaciente, FichaPaciente.toGenero(generoPaciente),
                 alturaPaciente, pesoPaciente);
 
+        // Persiste na pasta "fichas"
         saveInMemory(fichaPaciente);
     }
 
     public void atualizarFichaPaciente() {
+        // Instanciação da variavel que controla se vai ou não mudar o dado em questao
         char opcaoMudar = 'i';
+        // Enunciado
         System.out.println("# #");
         System.out.print("ATUALIZAÇÃO DE FICHA DE PACIENTE\n");
         System.out.println("# #\n");
+        // O nome é a chave de busca
         System.out.print("Nome completo do paciente: ");
         String nomePaciente = sc.nextLine();
         try {
+            // Operação para mudar o nome do arquivo para fazer um novo com o nome certo e deletar depois
             File arquivoComNomeAntigo = new File("./fichas/" + transformaNome(nomePaciente) + ".txt");
             File arquivoComNomeNovo = new File("./fichas/" + transformaNome(nomePaciente) + "-antigo.txt");
             arquivoComNomeAntigo.renameTo(arquivoComNomeNovo);
+            // Abre o reader e o writer
             BufferedReader reader = new BufferedReader(new FileReader(
                     "./fichas/" + transformaNome(nomePaciente) + "-antigo.txt"));
             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(
                     "./fichas/" + transformaNome(nomePaciente) + ".txt"), StandardCharsets.UTF_8);
             BufferedWriter bufWriter = new BufferedWriter(writer);
+            // Declaração da variável que será cada linha do arquivo a ser atualizado
             String linhaAtual;
+            // Padrões para achar a linha certa para mudar
             Pattern padraoIdade = Pattern.compile(".*Idade.*");
             Pattern padraoGenero = Pattern.compile(".*Gênero.*");
             Pattern padraoAltura = Pattern.compile(".*Altura.*");
             Pattern padraoPeso = Pattern.compile(".*Peso.*");
+            // Loop para cada opção dos atributos
             for (int i = 0; i < ATRIBUTOS.length; i++) {
                 while (true) {
+                    // Começa perguntando se quer mudar ou não
                     System.out.print("Mudar " + ATRIBUTOS[i] + " (S ou N)? ");
                     opcaoMudar = Character.toUpperCase(sc.nextLine().charAt(0));
                     if (opcaoMudar == 'S' || opcaoMudar == 'N') {
@@ -73,6 +87,9 @@ public class ServicoFichaPaciente {
                     System.out.println("\n--- Aviso: S ou N ---\n");
                 }
                 if (opcaoMudar == 'S') {
+                    // Se sim, o caso cai no atributo atual do loop no ATRIBUTOS, e daí atualiza, lendo da entrada e
+                    // escrevendo no arquivo. A ideia é criar um novo arquivo só mudando a linha que precisa e deletando
+                    // o antigo
                     switch (i) {
                         case 0 -> {
                             System.out.print("Nov" + ATRIBUTOS[i] + ": ");
@@ -87,6 +104,7 @@ public class ServicoFichaPaciente {
                                     bufWriter.newLine();
                                 }
                             }
+                            // Precisa apagar o arquivo temporário. Porque foi feito um arquivo novo para atualizar.
                             arquivoComNomeNovo.deleteOnExit();
                         }
                         case 1 -> {
@@ -142,6 +160,8 @@ public class ServicoFichaPaciente {
                     }
                 }
             }
+            // consumir '\n'
+            sc.nextLine();
             System.out.println("\n--- Ficha Atualizada ---\n");
             bufWriter.close();
             writer.close();
@@ -152,16 +172,21 @@ public class ServicoFichaPaciente {
     }
 
     public void verFichaPaciente() {
+        // Enunciado
         System.out.println("# #");
         System.out.print("VISUALIZAR FICHA DE PACIENTE\n");
         System.out.println("# #\n");
+        // Entrada da chave de busca
         System.out.print("Nome completo do paciente: ");
         String nomePaciente = sc.nextLine();
         try {
+            // Instancia o reader
             BufferedReader reader = new BufferedReader(new FileReader(
                     "./fichas/" + transformaNome(nomePaciente) + ".txt"));
+            // Declara a variavel da linha
             String linhaAtual;
             System.out.println();
+            // Exibe cada linha
             while((linhaAtual = reader.readLine()) != null) {
                 System.out.println(linhaAtual);
             }
@@ -172,6 +197,7 @@ public class ServicoFichaPaciente {
         }
     }
 
+    // Método para persistir na memória local
     public void saveInMemory(FichaPaciente fichaPaciente) {
         try {
             Files.createDirectories(Paths.get("./fichas"));
@@ -190,12 +216,14 @@ public class ServicoFichaPaciente {
             bufWriter.write("Peso: " + fichaPaciente.getPeso() + " Kg");
             bufWriter.close();
             writer.close();
-            System.out.println("\n--- Ficha salva com sucesso ---");
+            sc.nextLine();
+            System.out.println("\n--- Ficha salva com sucesso ---\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // os 2 métodos a seguir trabalham em conjunto para modificar o nome para dar nome ao arquivo criado
     private String transformaNome(String nome) {
         return decompose(nome.replace(" ","-").toLowerCase());
     }

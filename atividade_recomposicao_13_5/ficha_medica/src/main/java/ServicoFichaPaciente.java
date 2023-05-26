@@ -152,7 +152,24 @@ public class ServicoFichaPaciente {
     }
 
     public void verFichaPaciente() {
-
+        System.out.println("# #");
+        System.out.print("VISUALIZAR FICHA DE PACIENTE\n");
+        System.out.println("# #\n");
+        System.out.print("Nome completo do paciente: ");
+        String nomePaciente = sc.nextLine();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(
+                    "./fichas/" + transformaNome(nomePaciente) + ".txt"));
+            String linhaAtual;
+            System.out.println();
+            while((linhaAtual = reader.readLine()) != null) {
+                System.out.println(linhaAtual);
+            }
+            System.out.println("\n--- Ficha visualizada ---\n");
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Arquivo inexistente: " + e.getMessage());
+        }
     }
 
     public void saveInMemory(FichaPaciente fichaPaciente) {

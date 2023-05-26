@@ -3,6 +3,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class ServicoFichaPaciente {
     static Scanner sc = new Scanner(System.in);
@@ -49,26 +50,49 @@ public class ServicoFichaPaciente {
         System.out.print("Nome completo do paciente: ");
         String nomePaciente = sc.nextLine();
         try {
+            File arquivoComNomeAntigo = new File("./fichas/" + transformaNome(nomePaciente) + ".txt");
+            File arquivoComNomeNovo = new File("./fichas/" + transformaNome(nomePaciente) + "-antigo.txt");
+            arquivoComNomeAntigo.renameTo(arquivoComNomeNovo);
             BufferedReader reader = new BufferedReader(new FileReader(
-                    "./fichas/" + transformaNome(nomePaciente) + ".txt"));
+                    "./fichas/" + transformaNome(nomePaciente) + "-antigo.txt"));
+            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(
+                    "./fichas/" + transformaNome(nomePaciente) + ".txt"), StandardCharsets.UTF_8);
+            BufferedWriter bufWriter = new BufferedWriter(writer);
+            String linhaAtual;
+            Pattern padraoIdade = Pattern.compile(".*Idade.*");
+            Pattern padraoGenero = Pattern.compile(".*Gênero.*");
+            Pattern padraoAltura = Pattern.compile(".*Altura.*");
+            Pattern padraoPeso = Pattern.compile(".*Peso.*");
             for (int i = 0; i < ATRIBUTOS.length; i++) {
                 while (true) {
                     System.out.print("Mudar " + ATRIBUTOS[i] + " (S ou N)? ");
                     opcaoMudar = Character.toUpperCase(sc.nextLine().charAt(0));
+                    if (i == ATRIBUTOS.length - 1) System.out.println();
                     if (opcaoMudar == 'S' || opcaoMudar == 'N') {
                         break;
                     }
                     System.out.println("\n--- Aviso: S ou N ---\n");
                 }
                 if (opcaoMudar == 'S') {
-                    System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                     switch (i) {
                         case 0:
+                            System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                             int idadePaciente = sc.nextInt();
                             sc.nextLine();
+                            while ((linhaAtual = reader.readLine()) != null) {
+                                if (padraoIdade.matcher(linhaAtual).matches()) {
+                                    bufWriter.write("Idade: " + idadePaciente + (idadePaciente != 1 ? " anos" : " ano"));
+                                    bufWriter.newLine();
+                                } else {
+                                    bufWriter.write(linhaAtual);
+                                    bufWriter.newLine();
+                                }
+                            }
+                            arquivoComNomeNovo.deleteOnExit();
                             break;
                         case 1:
                             while (true) {
+                                System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                                 generoPaciente = Character.toUpperCase(sc.nextLine().charAt(0));
                                 if (generoPaciente == 'M' || generoPaciente == 'F') {
                                     break;
@@ -77,15 +101,19 @@ public class ServicoFichaPaciente {
                             }
                             break;
                         case 2:
+                            System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                             double alturaPaciente = sc.nextDouble();
                             break;
                         case 3:
+                            System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                             double pesoPaciente = sc.nextDouble();
                             break;
                     }
                 }
             }
-
+            bufWriter.close();
+            writer.close();
+            reader.close();
         } catch (IOException e) {
             System.out.println("\nArquivo não encontrado: " + e.getMessage() + "\n");
         }

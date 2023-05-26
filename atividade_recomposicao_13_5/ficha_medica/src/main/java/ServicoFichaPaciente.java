@@ -67,7 +67,6 @@ public class ServicoFichaPaciente {
                 while (true) {
                     System.out.print("Mudar " + ATRIBUTOS[i] + " (S ou N)? ");
                     opcaoMudar = Character.toUpperCase(sc.nextLine().charAt(0));
-                    if (i == ATRIBUTOS.length - 1) System.out.println();
                     if (opcaoMudar == 'S' || opcaoMudar == 'N') {
                         break;
                     }
@@ -75,7 +74,7 @@ public class ServicoFichaPaciente {
                 }
                 if (opcaoMudar == 'S') {
                     switch (i) {
-                        case 0:
+                        case 0 -> {
                             System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                             int idadePaciente = sc.nextInt();
                             sc.nextLine();
@@ -89,28 +88,61 @@ public class ServicoFichaPaciente {
                                 }
                             }
                             arquivoComNomeNovo.deleteOnExit();
-                            break;
-                        case 1:
+                        }
+                        case 1 -> {
                             while (true) {
-                                System.out.print("Nov" + ATRIBUTOS[i] + ": ");
+                                System.out.print("Nov" + ATRIBUTOS[i] + " (M/F): ");
                                 generoPaciente = Character.toUpperCase(sc.nextLine().charAt(0));
                                 if (generoPaciente == 'M' || generoPaciente == 'F') {
                                     break;
                                 }
                                 System.out.println("\n--- Aviso: M ou F ---\n");
                             }
-                            break;
-                        case 2:
-                            System.out.print("Nov" + ATRIBUTOS[i] + ": ");
+                            while ((linhaAtual = reader.readLine()) != null) {
+                                if (padraoGenero.matcher(linhaAtual).matches()) {
+                                    bufWriter.write("Gênero: " + FichaPaciente.toGenero(generoPaciente));
+                                    bufWriter.newLine();
+                                } else {
+                                    bufWriter.write(linhaAtual);
+                                    bufWriter.newLine();
+                                }
+                            }
+                            arquivoComNomeNovo.deleteOnExit();
+                        }
+                        case 2 -> {
+                            System.out.print("Nov" + ATRIBUTOS[i] + " (use vírgula): ");
                             double alturaPaciente = sc.nextDouble();
-                            break;
-                        case 3:
+                            sc.nextLine();
+                            while ((linhaAtual = reader.readLine()) != null) {
+                                if (padraoAltura.matcher(linhaAtual).matches()) {
+                                    bufWriter.write("Altura: " + alturaPaciente + " m");
+                                    bufWriter.newLine();
+                                } else {
+                                    bufWriter.write(linhaAtual);
+                                    bufWriter.newLine();
+                                }
+                            }
+                            arquivoComNomeNovo.deleteOnExit();
+                        }
+                        case 3 -> {
                             System.out.print("Nov" + ATRIBUTOS[i] + ": ");
                             double pesoPaciente = sc.nextDouble();
-                            break;
+                            while ((linhaAtual = reader.readLine()) != null) {
+                                if (padraoPeso.matcher(linhaAtual).matches()) {
+                                    bufWriter.write("Peso: " + pesoPaciente + " Kg");
+                                    bufWriter.newLine();
+                                } else {
+                                    bufWriter.write(linhaAtual);
+                                    bufWriter.newLine();
+                                }
+                            }
+                            arquivoComNomeNovo.deleteOnExit();
+                            System.out.println();
+                        }
                     }
                 }
             }
+            System.out.println("\n--- Ficha Atualizada ---\n");
             bufWriter.close();
             writer.close();
             reader.close();
@@ -120,6 +152,7 @@ public class ServicoFichaPaciente {
     }
 
     public void verFichaPaciente() {
+
     }
 
     public void saveInMemory(FichaPaciente fichaPaciente) {
@@ -135,7 +168,7 @@ public class ServicoFichaPaciente {
             bufWriter.newLine();
             bufWriter.write("Gênero: " + fichaPaciente.getGenero());
             bufWriter.newLine();
-            bufWriter.write("Altura: " + fichaPaciente.getAltura()+ " m");
+            bufWriter.write("Altura: " + fichaPaciente.getAltura() + " m");
             bufWriter.newLine();
             bufWriter.write("Peso: " + fichaPaciente.getPeso() + " Kg");
             bufWriter.close();

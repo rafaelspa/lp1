@@ -1,7 +1,0 @@
-Ficha Médica
-
-Nome: as as
-Idade: 11 anos
-Gênero: Masculino
-Altura: 1.0 m
-Peso: 1.0 Kg

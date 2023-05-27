@@ -16,8 +16,9 @@
                   <Font size="15.0" />
                </font>
             </TextArea>
-            <ComboBox fx:id="cbAnimais" layoutX="188.0" layoutY="26.0" promptText="Animais" />
-            <Button fx:id="btn_enviar" layoutX="273.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClique" text="Enviar" />
+            <ComboBox fx:id="cbAnimais" layoutX="188.0" layoutY="26.0" onAction="#onChangeCB" promptText="Animais" />
+            <Button fx:id="btnEnviar" layoutX="273.0" layoutY="26.0" mnemonicParsing="false" onAction="#onCliqueEnviar" text="Enviar" />
+            <Button fx:id="btnNovo" layoutX="143.0" layoutY="26.0" mnemonicParsing="false" onAction="#onCliqueNovo" text="Novo" />
          </children></AnchorPane>
   </content>
 </TitledPane>

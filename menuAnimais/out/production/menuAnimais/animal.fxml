@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
@@ -15,7 +16,8 @@
                   <Font size="15.0" />
                </font>
             </TextArea>
-            <ComboBox fx:id="cbAnimais" layoutX="188.0" layoutY="26.0" onAction="#onAction" promptText="Animais" />
+            <ComboBox fx:id="cbAnimais" layoutX="188.0" layoutY="26.0" promptText="Animais" />
+            <Button fx:id="btn_enviar" layoutX="273.0" layoutY="26.0" mnemonicParsing="false" onAction="#onClique" text="Enviar" />
          </children></AnchorPane>
   </content>
 </TitledPane>

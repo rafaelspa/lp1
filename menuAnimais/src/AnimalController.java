@@ -1,4 +1,3 @@
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -10,9 +9,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class AnimalController implements Initializable {
-    Animal animal1 = new Animal(1, "Loro", "Piriquito");
-    Animal animal2 = new Animal(2, "Bobi", "Cachorro sem raça definida");
-    Animal animal3 = new Animal(3, "Donald", "Pato");
+    Animal animal1 = new Animal(1, "Loro", 2);
+    Animal animal2 = new Animal(2, "Bobi", 31);
+    Animal animal3 = new Animal(3, "Donald", 5);
     Map<Integer,Animal> animais = new HashMap<Integer,Animal>(){{
         this.put(1, animal1);
         this.put(2, animal2);
@@ -26,7 +25,7 @@ public class AnimalController implements Initializable {
     private TextArea textareaAnimal;
 
     @FXML
-    void onAction() {
+    void onClique() {
         Animal animal = getAnimalByName(cbAnimais.getValue());
         if (animal != null) {
             textareaAnimal.setText(animal.toString());

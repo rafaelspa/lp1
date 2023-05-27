@@ -1,12 +1,12 @@
 public class Animal {
     private int id;
     private String nome;
-    private String tipo;
+    private int idade;
 
-    public Animal(int id, String nome, String especie) {
+    public Animal(int id, String nome, int idade) {
         this.id = id;
         this.nome = nome;
-        this.tipo = especie;
+        this.idade = idade;
     }
 
     public int getId() {
@@ -25,12 +25,12 @@ public class Animal {
         this.nome = nome;
     }
 
-    public String getTipo() {
-        return tipo;
+    public int getIdade() {
+        return idade;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 
     @Override
@@ -38,6 +38,6 @@ public class Animal {
         return "Dados do animal\n\n" +
                 "id: " + id + "\n" +
                 "nome: " + nome + '\n' +
-                "tipo: " + tipo;
+                "idade: " + idade;
     }
 }

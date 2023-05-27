@@ -26,15 +26,13 @@ public class AnimalController implements Initializable {
     private TextArea textareaAnimal;
 
     @FXML
-    void onAction(ActionEvent event) {
-        textareaAnimal.setText("");
-        Animal animal;
-                StringBuilder stringBuilder = new StringBuilder("");
-        for (int i = 0; i < cbAnimais.getItems().size(); i++) {
-            animal = getAnimalByName(cbAnimais.getItems().get(i));
-            if(animal != null) stringBuilder.append(animal.toString());
+    void onAction() {
+        Animal animal = getAnimalByName(cbAnimais.getValue());
+        if (animal != null) {
+            textareaAnimal.setText(animal.toString());
+        } else {
+            textareaAnimal.setText("Escolha um animal");
         }
-        textareaAnimal.setText(stringBuilder.toString());
     }
 
     private Animal getAnimalByName(String nome) {
@@ -48,6 +46,7 @@ public class AnimalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        cbAnimais.getItems().add("Animais");
         cbAnimais.getItems().add(animal1.getNome());
         cbAnimais.getItems().add(animal2.getNome());
         cbAnimais.getItems().add(animal3.getNome());

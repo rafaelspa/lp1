@@ -35,7 +35,7 @@ public class Animal {
 
     @Override
     public String toString() {
-        return "Dados do animal\n" +
+        return "Dados do animal\n\n" +
                 "id: " + id + "\n" +
                 "nome: " + nome + '\n' +
                 "tipo: " + tipo;

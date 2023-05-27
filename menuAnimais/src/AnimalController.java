@@ -1,24 +1,36 @@
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class AnimalController implements Initializable {
-    Animal animal1 = new Animal(1, "Loro", 2);
-    Animal animal2 = new Animal(2, "Bobi", 31);
-    Animal animal3 = new Animal(3, "Donald", 5);
-    List<Animal> animais = new ArrayList<Animal>() {{
-        this.add(animal1);
-        this.add(animal2);
-        this.add(animal3);
-    }};
+    public List<Animal> animais;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+
+    @FXML
+    private TextField tfIdCadastro;
+
+    @FXML
+    private TextField tfNomeCadastro;
+
+    @FXML
+    private TextField tfIdadeCadastro;
 
     @FXML
     private Button btnEnviar;
@@ -38,7 +50,12 @@ public class AnimalController implements Initializable {
         if (animal != null) {
             textareaAnimal.setText(animal.toString());
         } else {
-            textareaAnimal.setText("Escolha um animal");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Escolha um animal\n");
+            for (Animal a : animais) {
+                stringBuilder.append(a.getNome() + "\n");
+            }
+            textareaAnimal.setText(stringBuilder.toString());
         }
     }
 
@@ -54,15 +71,42 @@ public class AnimalController implements Initializable {
     }
 
     @FXML
-    void onCliqueNovo() {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+    void onCliqueNovo(ActionEvent event) throws IOException {
+        mudarParaCadastrarAnimal(event);
     }
 
+    @FXML
+    void onCliqueCadastrar(ActionEvent event) throws IOException {
+        if (!tfIdCadastro.getText().equals("") &&
+                !tfNomeCadastro.getText().equals("") &&
+                !tfIdadeCadastro.getText().equals("")
+            ) {
+            Animal novoAnimal = new Animal(
+                    Integer.parseInt(tfIdCadastro.getText()),
+                    tfNomeCadastro.getText(),
+                    Integer.parseInt(tfIdadeCadastro.getText())
+            );
+            animais.add(novoAnimal);
+            Main.atualizarAnimais(animais);
+        }
+        mudarParaMostrarAnimal(event);
+    }
 
+    public void mudarParaMostrarAnimal(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mostrar-animal.fxml")));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void mudarParaCadastrarAnimal(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("cadastrar-animal.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     private Animal getAnimalByName(String nome) {
         for (Animal animal : animais) {
@@ -75,9 +119,10 @@ public class AnimalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbAnimais.getItems().add("Animais");
-        cbAnimais.getItems().add(animal1.getNome());
-        cbAnimais.getItems().add(animal2.getNome());
-        cbAnimais.getItems().add(animal3.getNome());
+        animais = Main.chamarListaAnimais();
+        if (cbAnimais != null && animais != null) {
+            cbAnimais.getItems().add("Animais");
+            animais.forEach((animal) -> cbAnimais.getItems().add(animal.getNome()));
+        }
     }
 }

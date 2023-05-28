@@ -61,7 +61,7 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    public Emprestimo realizarEmprestimo(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
+    public Emprestimo emprestarLivro(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
         try {
             Biblioteca.existeEmprestimoPorId(id);
             livro.emprestar();

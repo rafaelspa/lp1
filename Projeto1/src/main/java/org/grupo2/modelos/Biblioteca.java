@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 
-import static java.util.Optional.empty;
-
 public class Biblioteca {
     private final static Integer idLivros = 0;
     private final static Integer idUsuarios = 0;
@@ -21,7 +19,7 @@ public class Biblioteca {
     private static Map<Integer, Administrador> administradores = new HashMap<Integer, Administrador>();
     private static Map<Integer, Emprestimo> emprestimos = new HashMap<Integer, Emprestimo>();
     private static Map<Integer, Reserva> reservas = new HashMap<Integer, Reserva>();
-    private static Map<Integer, Usuario> usuarios = new HashMap<>();
+    private static Map<Integer, Usuario> usuario = new HashMap<>();
 
     private static final int PORT = 8080;
 
@@ -124,11 +122,11 @@ public class Biblioteca {
         Biblioteca.reservas = reservas;
     }
 
-    public static void setUsuarios(Map<Integer, Usuario> usuarios) {
-        Biblioteca.usuarios = usuarios;
+    public static void setUsuario(Map<Integer, Usuario> usuario) {
+        Biblioteca.usuario = usuario;
     }
 
-    public static Livro retornaLivro(String titulo) {
+    public static Livro buscarLivro(String titulo) {
         for (int i = 0; i < getLivros().values().size(); i++) {
             if (getLivros().get(i).getTitulo().equals(titulo)) {
                 return getLivros().get(i);

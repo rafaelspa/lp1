@@ -22,7 +22,7 @@ public class ConsumirApiProduto {
         System.out.println("GET /produtos: " + response.body());
         
         // POST /produtos
-        String requestBody = "{\"descricao\":\"Caneta esferográfica azul Vic\"}";
+        String requestBody = "\"descricao\":\"Caneta esferográfica azul Vic\"}";
         request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .header("Content-Type", "application/json")

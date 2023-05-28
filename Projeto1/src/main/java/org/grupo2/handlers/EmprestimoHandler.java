@@ -48,7 +48,7 @@ public class EmprestimoHandler implements HttpHandler {
         Cliente cliente = Biblioteca.getClientes().get(Integer.parseInt(arrayListEmprestimo.get(2)));
         Instant dataEmprestimo = Instant.parse(arrayListEmprestimo.get(3));
         Instant dataDevolucao = Instant.parse(arrayListEmprestimo.get(4));
-        Emprestimo emprestimo = funcionario.realizarEmprestimo(emprestimoId, livro, cliente, dataEmprestimo, dataDevolucao);
+        Emprestimo emprestimo = funcionario.emprestarLivro(emprestimoId, livro, cliente, dataEmprestimo, dataDevolucao);
         sendResponse(exchange, emprestimo.toJson(), 201);
     }
 

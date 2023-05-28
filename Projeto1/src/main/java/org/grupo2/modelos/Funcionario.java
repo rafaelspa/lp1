@@ -23,8 +23,8 @@ public class Funcionario extends Usuario { // implements GerenciamentoDeUsuarios
     }
 
     @Override
-    public Emprestimo realizarEmprestimo(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
-        return super.realizarEmprestimo(id, livro, cliente, dataEmprestimo, dataDevolucao);
+    public Emprestimo emprestarLivro(int id, Livro livro, Cliente cliente, Instant dataEmprestimo, Instant dataDevolucao) throws Exception {
+        return super.emprestarLivro(id, livro, cliente, dataEmprestimo, dataDevolucao);
     }
 
     public void realizarDevolucao() {
